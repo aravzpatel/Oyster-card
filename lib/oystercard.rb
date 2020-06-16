@@ -7,7 +7,7 @@ class Oystercard
     end 
 
     def top_up(value)
-        @balance += value
+      @balance + value > 90 ? (raise "You've reached the maximum limit") : @balance += value
     end
 end 
 
