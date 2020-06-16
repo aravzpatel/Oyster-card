@@ -15,8 +15,24 @@ describe Oystercard do
       expect(oystercard.balance).to eql(5)
     end
     
-    it "should raise an error if the balance is over 90" do
-      expect { oystercard.top_up(91) }.to raise_error "You've reached the maximum limit"
+    it "should raise an error if the balance is over the MAXIMUMLIMIT" do
+      expect { oystercard.top_up(Oystercard::MAXIMUMLIMIT + 1) }.to raise_error "You've reached the maximum limit, which is #{Oystercard::MAXIMUMLIMIT}"
+    end
+  end
+
+  describe '#deduct' do
+    it "should deduct 2.50 every time" do
+      oystercard.top_up(5)
+      oystercard.deduct
+      expect(oystercard.balance).to eql(2.5)
+    end
+  end
+
+  describe "#touch_in" do
+    it "should set in_journey? to true" do
+      oystercard.top_up(5)
+      oystercard.touch_in
+      expect(oystercard.location).to eql(true)
     end
   end
 end 
