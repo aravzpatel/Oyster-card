@@ -16,15 +16,15 @@ class Oystercard
     end
 
     def touch_in
-        @location = true
+      in_journey?
     end
     
     def touch_out
-        @location = false
+      in_journey?
     end
     
     def in_journey?
-      @location
+      @location = !@location
     end
 end 
 

@@ -38,8 +38,6 @@ describe Oystercard do
   
   describe "#touch_out" do
     it "should set in_journey? to false" do
-      oystercard.top_up(5)
-      oystercard.touch_out
       expect(oystercard.location).to eql(false)
     end
   end
