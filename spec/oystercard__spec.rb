@@ -56,16 +56,31 @@ describe Oystercard do
     end
 
     it "should set in_journey? to false" do
-      expect{ oystercard.touch_out }.to change(oystercard, :in_journey?).from(true).to(false)
+      expect{ oystercard.touch_out("station") }.to change(oystercard, :in_journey?).from(true).to(false)
     end
 
     it "should reduce the balance by the FARE amount" do
-      expect { oystercard.touch_out }.to change{oystercard.balance}.by(-Oystercard::FARE)
+      expect { oystercard.touch_out("station") }.to change{oystercard.balance}.by(-Oystercard::FARE)
     end
 
     it "station should be nil" do
-      expect {oystercard.touch_out}.to change{oystercard.entry_station}.from(station).to(nil)
+      expect {oystercard.touch_out("station")}.to change{oystercard.entry_station}.from(station).to(nil)
     end
+  end
+
+  describe "#show_history" do
+    it "should show empty travel history" do
+      expect(oystercard.history).to match_array([])
+    end
+
+    it "should save entry and exit stations" do
+      oystercard.top_up(10)
+      oystercard.touch_in("station1")
+      oystercard.touch_out("station2")
+      expect(oystercard.history).to match_array([{touch_in: "station1", touch_out: "station2"}])
+    end
+
+    
   end
 
 end 
