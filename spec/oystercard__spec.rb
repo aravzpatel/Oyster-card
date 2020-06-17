@@ -21,10 +21,11 @@ describe Oystercard do
   end
 
   describe '#deduct' do
-    it "should deduct 2.50 every time" do
-      oystercard.top_up(5)
-      oystercard.deduct
-      expect(oystercard.balance).to eql(2.5)
+    it "should deduct 1 every time" do
+      card = Oystercard.new
+      card.top_up(5)
+      card.send(:deduct) #can call a private method in a test
+      expect(card.balance).to eql(5 - Oystercard::FARE)
     end
   end
 
@@ -34,11 +35,26 @@ describe Oystercard do
       oystercard.touch_in
       expect(oystercard.location).to eql(true)
     end
+
+    it "should only let you touch in if you have a minimum amount for a journey" do
+      expect { oystercard.touch_in }.to raise_error(StandardError, "you have insufficient funds")
+    end
   end
   
   describe "#touch_out" do
-    it "should set in_journey? to false" do
-      expect(oystercard.location).to eql(false)
+    
+    before "top up the card" do
+      oystercard.top_up(5)
+      oystercard.touch_in
     end
+
+    it "should set in_journey? to false" do
+      expect{ oystercard.touch_out }.to change{oystercard.location}.from(true).to(false)
+    end
+
+    it "should reduce the balance by the FARE amount" do
+      expect { oystercard.touch_out }.to change{oystercard.balance}.by(-Oystercard::FARE)
+    end
+    
   end
 end 
