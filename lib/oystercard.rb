@@ -14,19 +14,19 @@ class Oystercard
     end
 
     def touch_in(station)
-      balance < FARE ? (raise StandardError.new "you have insufficient funds") : in_journey?
-      @entry_station = station
+      balance < FARE ? (raise StandardError.new "you have insufficient funds") : in_journey? #
+      @entry_station = station #
     end
     
     def touch_out(station)
-      in_journey?
-      deduct
-      @history << { touch_in: @entry_station, touch_out: station }
+      in_journey? #
+      deduct #
+      @history << { touch_in: @entry_station, touch_out: station } #
       @entry_station = nil
     end
     
     def in_journey?
-      @entry_station != nil
+      @entry_station != nil #
     end
 
     private
